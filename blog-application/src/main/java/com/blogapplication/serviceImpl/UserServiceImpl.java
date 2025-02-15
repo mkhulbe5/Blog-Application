@@ -20,6 +20,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
 	
+	@Autowired
+	private RedisService redisService;
+	
 	public static Logger log;
 
 	@Override
@@ -43,11 +46,12 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userDto.getEmail());
 		user.setAbout(userDto.getAbout());
 		User updatedUser = this.userRepository.save(user);
+		redisService.setKey("user", userDto, 5000);
 		return this.userToUserDto(updatedUser);
 	}
 
 	@Override
-	public UserDto getUserById(UserDto userDto, Integer id) {
+	public UserDto getUserById(Integer id) {
 		// TODO Auto-generated method stub
 		User user = this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", "id", id));
 		return this.userToUserDto(user);
