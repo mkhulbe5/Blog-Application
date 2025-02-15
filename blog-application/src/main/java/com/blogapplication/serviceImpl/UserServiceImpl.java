@@ -19,18 +19,18 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	private RedisService redisService;
-	
-	public static Logger log;
+
+//	public static Logger log;
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
 		User user = this.dtoToUser(userDto);
-		if(!ObjectUtils.isEmpty(user)) {
+		if (!ObjectUtils.isEmpty(user)) {
 			User savedUser = this.userRepository.save(user);
-			log.info("saving user into database");
+			redisService.setKey("user", savedUser, 15);
 			return this.userToUserDto(savedUser);
 		}
 		return null;
@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userDto.getEmail());
 		user.setAbout(userDto.getAbout());
 		User updatedUser = this.userRepository.save(user);
-		redisService.setKey("user", userDto, 5000);
 		return this.userToUserDto(updatedUser);
 	}
 

@@ -1,5 +1,7 @@
 package com.blogapplication.serviceImpl;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,25 +16,27 @@ import lombok.extern.slf4j.Slf4j;
 public class RedisService {
 
 	@Autowired
-	private RedisTemplate<String,Object> redisTemplate;
-	
-	
-	public <T> T getKey(String key ,Class<T> entityClass) {
+	private RedisTemplate<String, Object> redisTemplate;
+
+	public <T> T getKey(String key, Class<T> entityClass) {
 		try {
 			Object object = redisTemplate.opsForValue().get(key);
 			ObjectMapper objectMapper = new ObjectMapper();
-			return objectMapper.readValue(key,UserDto.class);
-		}catch(Exception e) {
-			
+			return (T) objectMapper.readValue(key, UserDto.class);
+		} catch (Exception e) {
+
 		}
+		return null;
 	}
-	
-	public void setKey(String key ,Object o,long ttl) {
+
+	public void setKey(String key, Object o, long ttl) {
 		try {
-			redisTemplate.opsForValue().set(key, o, ttl);s);
-		}catch(Exception e) {
-			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String jsonValue = objectMapper.writeValueAsString(o); // Serialize the object, not the objectMapper
+			redisTemplate.opsForValue().set(key, jsonValue, ttl, TimeUnit.SECONDS);
+		} catch (Exception e) {
+			e.printStackTrace(); // Print the error for debugging
 		}
 	}
-	
+
 }

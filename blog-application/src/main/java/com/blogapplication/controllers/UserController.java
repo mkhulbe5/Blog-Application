@@ -25,12 +25,12 @@ public class UserController {
 	@Autowired
 	RedisService redisService;
 
-	public static Logger log;
+//	public static Logger log;
 
 	@PostMapping("/create")
 	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
 		UserDto user = userService.createUser(userDto);
-		log.info("user has been saved successfully");
+//		log.info("user has been saved successfully");
 		return new ResponseEntity<UserDto>(user, HttpStatus.OK);
 	}
 
