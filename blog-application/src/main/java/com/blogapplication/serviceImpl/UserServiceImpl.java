@@ -3,6 +3,7 @@ package com.blogapplication.serviceImpl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RedisService redisService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 //	public static Logger log;
 
@@ -72,22 +76,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User dtoToUser(UserDto userDto) {
-		User user = new User();
-		user.setId(userDto.getId());
-		user.setUserName(userDto.getUserName());
-		user.setPassword(userDto.getPassword());
-		user.setEmail(userDto.getEmail());
-		user.setAbout(userDto.getAbout());
+//		User user = new User();
+//		user.setId(userDto.getId());
+//		user.setUserName(userDto.getUserName());
+//		user.setPassword(userDto.getPassword());
+//		user.setEmail(userDto.getEmail());
+//		user.setAbout(userDto.getAbout());
+//		return user;
+		
+		User user = this.modelMapper.map(userDto, User.class);
 		return user;
 	}
 
 	public UserDto userToUserDto(User user) {
-		UserDto userDto = new UserDto();
-		userDto.setId(user.getId());
-		userDto.setUserName(user.getUserName());
-		userDto.setPassword(user.getPassword());
-		userDto.setEmail(user.getEmail());
-		userDto.setAbout(user.getAbout());
-		return userDto;
+//		UserDto userDto = new UserDto();
+//		userDto.setId(user.getId());
+//		userDto.setUserName(user.getUserName());
+//		userDto.setPassword(user.getPassword());
+//		userDto.setEmail(user.getEmail());
+//		userDto.setAbout(user.getAbout());
+//		return userDto;
+		UserDto userdto = this.modelMapper.map(user, UserDto.class);
+		return userdto;
 	}
 }

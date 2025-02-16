@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogapplication.payloads.UserDto;
-import com.blogapplication.serviceImpl.RedisService;
+import com.blogapplication.serviceImpl .RedisService;
 import com.blogapplication.services.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -29,14 +31,14 @@ public class UserController {
 //	public static Logger log;
 
 	@PostMapping("/create")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 		UserDto user = userService.createUser(userDto);
 //		log.info("user has been saved successfully");
 		return new ResponseEntity<UserDto>(user, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/updateUser")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, Integer userId) {
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, Integer userId) {
 		UserDto updateUser = userService.updateUser(userDto, userId);
 		return new ResponseEntity<UserDto>(updateUser, HttpStatus.OK);
 	}
