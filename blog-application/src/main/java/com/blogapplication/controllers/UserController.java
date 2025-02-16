@@ -8,12 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogapplication.payloads.UserDto;
-import com.blogapplication.serviceImpl .RedisService;
+import com.blogapplication.serviceImpl.RedisService;
 import com.blogapplication.services.UserService;
 
 import jakarta.validation.Valid;
@@ -37,8 +38,8 @@ public class UserController {
 		return new ResponseEntity<UserDto>(user, HttpStatus.CREATED);
 	}
 
-	@PostMapping("/updateUser")
-	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, Integer userId) {
+	@PutMapping("{userId}")
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable Integer userId) {
 		UserDto updateUser = userService.updateUser(userDto, userId);
 		return new ResponseEntity<UserDto>(updateUser, HttpStatus.OK);
 	}
