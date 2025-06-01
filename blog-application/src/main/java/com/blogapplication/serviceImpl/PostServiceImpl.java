@@ -1,6 +1,6 @@
 package com.blogapplication.serviceImpl;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,13 +44,11 @@ public class PostServiceImpl implements PostService {
 		postToSave.setContent(postDto.getContent());
 		postToSave.setTitle(postDto.getTitle());
 		postToSave.setImageName("default.png");
-		postToSave.setCreatedOn(new Date());
+		postToSave.setCreatedOn(LocalDate.now());
 		postToSave.setUser(user);
 		postToSave.setCategory(category);
-
 		Post savedPost = postRepo.save(postToSave);
 		return this.modelMapper.map(savedPost, PostDto.class);
-
 	}
 
 	@Override
@@ -112,7 +110,8 @@ public class PostServiceImpl implements PostService {
 	public List<PostDto> serchPostsByKeyword(String keyWord) {
 		List<Post> searchedPost = postRepo.findByTitleContaining(keyWord);
 		List<PostDto> collect = searchedPost.stream()
-				.map((keywordSearch) -> this.modelMapper.map(keywordSearch, PostDto.class)).collect(Collectors.toList());
+				.map((keywordSearch) -> this.modelMapper.map(keywordSearch, PostDto.class))
+				.collect(Collectors.toList());
 
 		return collect;
 

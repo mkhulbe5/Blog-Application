@@ -1,8 +1,12 @@
 package com.blogapplication.payloads;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,4 +34,7 @@ public class UserDto {
 
 	@NotEmpty
 	private String about;
+	
+	@NotBlank(message ="role csnnot be empty or null" )
+	private String role;
 }

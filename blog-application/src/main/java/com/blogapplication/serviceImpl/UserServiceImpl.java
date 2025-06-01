@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import com.blogapplication.entity.User;
 import com.blogapplication.exceptions.ResourceNotFoundException;
@@ -22,22 +20,13 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 
 	@Autowired
-	private RedisService redisService;
-	
-	@Autowired
 	private ModelMapper modelMapper;
-
-//	public static Logger log;
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
 		User user = this.dtoToUser(userDto);
-		if (!ObjectUtils.isEmpty(user)) {
-			User savedUser = this.userRepository.save(user);
-			redisService.setKey("user", savedUser, 15);
-			return this.userToUserDto(savedUser);
-		}
-		return null;
+		User savedUser = this.userRepository.save(user);
+		return this.userToUserDto(savedUser);
 	}
 
 	@Override
@@ -76,27 +65,22 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User dtoToUser(UserDto userDto) {
-//		User user = new User();
-//		user.setId(userDto.getId());
-//		user.setUserName(userDto.getUserName());
-//		user.setPassword(userDto.getPassword());
-//		user.setEmail(userDto.getEmail());
-//		user.setAbout(userDto.getAbout());
-//		return user;
-		
 		User user = this.modelMapper.map(userDto, User.class);
 		return user;
 	}
 
 	public UserDto userToUserDto(User user) {
-//		UserDto userDto = new UserDto();
-//		userDto.setId(user.getId());
-//		userDto.setUserName(user.getUserName());
-//		userDto.setPassword(user.getPassword());
-//		userDto.setEmail(user.getEmail());
-//		userDto.setAbout(user.getAbout());
-//		return userDto;
 		UserDto userdto = this.modelMapper.map(user, UserDto.class);
 		return userdto;
+	}
+
+	@Override
+	public UserDto findByEmail(String email) {
+		// TODO Auto-generated method stub
+		User byEmail = userRepository.findByEmail(email);
+		if (byEmail != null) {
+			return modelMapper.map(byEmail, UserDto.class);
+		}
+		return null;
 	}
 }
