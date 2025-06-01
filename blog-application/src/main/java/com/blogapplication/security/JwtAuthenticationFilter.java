@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		  String requestPath = request.getServletPath();
-		   if (requestPath.equals("/api/v1/auth/login")) {
+		   if (requestPath.equals("/api/v1/auth/login") || requestPath.equals("/api/v1/auth/register")) {
 		        filterChain.doFilter(request, response);
 		        return;
 		    }

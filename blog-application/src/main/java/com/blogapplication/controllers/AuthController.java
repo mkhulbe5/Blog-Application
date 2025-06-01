@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blogapplication.payloads.UserDto;
 import com.blogapplication.security.JwtAuthRequest;
 import com.blogapplication.security.JwtAuthResponse;
 import com.blogapplication.security.JwtTokenHelper;
+import com.blogapplication.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -28,6 +30,15 @@ public class AuthController {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+
+	@Autowired
+	private UserService userService;
+
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> registerUser(@RequestBody UserDto registerRequest) {
+		UserDto registerUser = userService.registerUser(registerRequest);
+		return new ResponseEntity<UserDto>(registerUser, HttpStatus.CREATED);
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) {
